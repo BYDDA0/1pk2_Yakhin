@@ -8,101 +8,80 @@
        * при выводе цветом выделить пять максимальных значений в массиве */
         static void Main(string[] args)
         {
-            // Запрашиваем у пользователя размерность массива
-            Console.Write("Введите размерность n для квадратной матрицы n*n (n > 0): ");
+            // Запрос числа n у пользователя
+            Console.Write("Введите размерность массива n (n*n): ");
             int n = int.Parse(Console.ReadLine());
 
-            // Создаем квадратный массив размером n*n
-            int[,] matritsa = new int[n, n];
+            // Создание квадратного массива
+            int[,] array = new int[n, n];
             Random random = new Random();
 
-            // Заполняем массив случайными числами от 10 до 99
+            // Заполнение массива случайными числами от 10 до 99
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    matritsa[i, j] = random.Next(10, 100);
+                    array[i, j] = random.Next(10, 100); 
                 }
             }
 
-            // Находим минимальный элемент в матрице
-            int minElement = FindMinElement(matritsa);
-
-            // Умножаем матрицу на минимальный элемент
-            MultiplyMatrixByMinElement(matritsa, minElement);
-
-            // Выводим результат с выделением пяти максимальных значений
-            Console.WriteLine($"Минимальный элемент в матрице: {minElement}");
-            Console.WriteLine("Матрица после умножения на минимальный элемент:");
-
-            PrintMatrixWithMaxHighlight(matritsa);
-        }
-
-        static int FindMinElement(int[,] matritsa)
-        {
-            int min = matritsa[0, 0];
-            for (int i = 0; i < matritsa.GetLength(0); i++)
+            // Поиск минимального элемента
+            int minValue = array[0, 0];
+            for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < matritsa.GetLength(1); j++)
+                for (int j = 0; j < n; j++)
                 {
-                    if (matritsa[i, j] < min)
+                    if (array[i, j] < minValue)
                     {
-                        min = matritsa[i, j];
+                        minValue = array[i, j];
                     }
                 }
             }
-            return min;
-        }
 
-        static void MultiplyMatrixByMinElement(int[,] matritsa, int minEl)
-        {
-            for (int i = 0; i < matritsa.GetLength(0); i++)
+            Console.WriteLine($"Минимальный элемент в массиве: {minValue}");
+
+            // Умножение массива на минимальный элемент
+            for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < matritsa.GetLength(1); j++)
+                for (int j = 0; j < n; j++)
                 {
-                    matritsa[i, j] *= minEl;
+                    array[i, j] *= minValue;
                 }
             }
-        }
 
-        static void PrintMatrixWithMaxHighlight(int[,] matritsa)
-        {
-            // Находим пять максимальных значений
+            // Поиск пяти максимальных значений
             int[] maxval = new int[5];
-
-            for (int i = 0; i < matritsa.GetLength(0); i++)
+            for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < matritsa.GetLength(1); j++)
+                for (int j = 0; j < n; j++)
                 {
-                    int currentval = matritsa[i, j];
-                    // Проверяем, не является ли текущее значение одним из пяти максимальных
+                    // Проверка на наличие максимального значения
                     for (int k = 0; k < maxval.Length; k++)
                     {
-                        if (currentval > maxval[k])
+                        if (array[i, j] > maxval[k])
                         {
-                            // Сдвигаем значения вниз
+                            // Сдвигаем все меньшие значения
                             for (int l = maxval.Length - 1; l > k; l--)
                             {
                                 maxval[l] = maxval[l - 1];
                             }
-                            maxval[k] = currentval;
+                            maxval[k] = array[i, j];
                             break;
                         }
                     }
                 }
             }
 
-            // Выводим матрицу с выделением максимальных значений
-            for (int i = 0; i < matritsa.GetLength(0); i++)
+            // Вывод массива с выделением пяти максимальных значений
+            Console.WriteLine("\nМассив после умножения на минимальный элемент:");
+            for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < matritsa.GetLength(1); j++)
+                for (int j = 0; j < n; j++)
                 {
                     bool ismaxval = false;
-
-                    // Проверяем, является ли текущее значение одним из пяти максимальных
                     for (int k = 0; k < maxval.Length; k++)
                     {
-                        if (matritsa[i, j] == maxval[k])
+                        if (array[i, j] == maxval[k])
                         {
                             ismaxval = true;
                             break;
@@ -111,19 +90,20 @@
 
                     if (ismaxval)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red; // Устанавливаем цвет для максимальных значений
-                        Console.Write(matritsa[i, j].ToString().PadLeft(4));
-                        Console.ResetColor(); // Сбрасываем цвет
+                        Console.ForegroundColor = ConsoleColor.Red; // Выделяем цветом
+                        Console.Write(array[i, j] + "\t");
+                        Console.ResetColor(); // Сброс цвета
                     }
                     else
                     {
-                        Console.Write(matritsa[i, j].ToString().PadLeft(4));
+                        Console.Write(array[i, j] + "\t");
                     }
-                    Console.WriteLine();
                 }
-                
+                Console.WriteLine();
             }
+
         }
+        
     }
 }
 
