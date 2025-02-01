@@ -8,58 +8,63 @@
        *Если нет, то вывеси сообщение что матрица не является диагональной. */
         static void Main(string[] args)
         {
-            int n = 3; // Размерность матрицы
-            int[,] matritsa = {
-            { 1, 0, 0 },
-            { 0, 2, 0 },
-            { 0, 0, 3 }
-        };
+            // Ввод размерности матрицы
+            Console.Write("Введите размерность матрицы n (n*n): ");
+            int n = int.Parse(Console.ReadLine());
 
-            if (IsDiagonalMatrix(matritsa, n))
+            // Создаем квадратную матрицу размером n*n
+            int[,] matrix = new int[n, n];
+
+            // Заполняем матрицу
+            Console.WriteLine("Введите элементы матрицы:");
+            for (int i = 0; i < n; i++)
             {
-                Console.WriteLine("Матрица является диагональной:");
-                DisplayMatrixWithDiagonalHighlight(matritsa, n);
+                for (int j = 0; j < n; j++)
+                {
+                    matrix[i, j] = int.Parse(Console.ReadLine());
+                }
+            }
+
+            // Проверяем, является ли матрица диагональной
+            bool isDiagonal = true;
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (i != j && matrix[i, j] != 0)
+                    {
+                        isDiagonal = false;
+                        break;
+                    }
+                }
+                if (!isDiagonal) break;
+            }
+
+            // Выводим результат
+            if (isDiagonal)
+            {
+                Console.WriteLine("\nМатрица является диагональной. Выводим с выделением главной диагонали:");
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        if (i == j)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green; // Зеленый для главной диагонали
+                            Console.Write(matrix[i, j] + " ");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.Write(matrix[i, j] + " ");
+                        }
+                    }
+                    Console.WriteLine();
+                }
             }
             else
             {
-                Console.WriteLine("Матрица не является диагональной.");
-            }
-        }
-
-        static bool IsDiagonalMatrix(int[,] matritsa, int n)
-        {
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    if (i != j && matritsa[i, j] != 0)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        static void DisplayMatrixWithDiagonalHighlight(int[,] matritsa, int n)
-        {
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    if (i == j)
-                    {
-                        // Выделяем элементы главной диагонали
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write(matritsa[i, j] + " ");
-                        Console.ResetColor();
-                    }
-                    else
-                    {
-                        Console.Write(matritsa[i, j] + " ");
-                    }
-                }
-                Console.WriteLine();
+                Console.WriteLine("\nМатрица не является диагональной.");
             }
         }
     }
